@@ -41,11 +41,7 @@ const scalarMult = function (v1, s) {
 };
 
 const negVector = function (v1) {
-    return [
-        -v1[0],
-        -v1[1],
-        -v1[2]
-    ];
+    return [-v1[0], -v1[1], -v1[2]];
 };
 
 const addVector = Shade.addVector;
