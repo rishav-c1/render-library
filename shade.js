@@ -76,7 +76,7 @@ Shade.poly_to_colour = function (polygon_3d) {
     );
 };
 
-//Use a b from plot
+//Use a,b from plot
 const a = 0.22388;
 const b = 0.44708;
 const vcam = negVector(normalise([a, b, -1]));

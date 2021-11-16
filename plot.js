@@ -1,5 +1,5 @@
 /*
-Inputs - colour (rgb), list of 3d polygons, vcam, light vector
+Inputs - colour(rgb), list of 3d polygons, vcam, light vector
 */
 
 import Shade from "./shade.js";
