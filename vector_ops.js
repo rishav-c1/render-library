@@ -36,8 +36,8 @@ Vector.scalarMult = function (vector, s) {
     return [vector[0] * s, vector[1] * s, vector[2] * s];
 };
 
-Vector.negVector = function (vector) {
-    return [-vector[0], -vector[1], -vector[2]];
+Vector.negVector = function ([x, y, z]) {
+    return [-x, -y, -z];
 };
 
 Vector.normalise = function (vector) {
