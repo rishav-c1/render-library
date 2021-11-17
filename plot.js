@@ -1,4 +1,4 @@
-//Inputs - colour(rgb), list of 3d polygons, vcam, light vector
+//Inputs - colour(rgb), list of 3d polygons, vcam, light vector, frame ht,wd
 import Shade from "./shade.js";
 const colour = [254, 157, 61];
 let ks_colour = [255, 255, 255];
