@@ -40,4 +40,4 @@ Vector.normalise = function ([x, y, z]) {
     return [x / mag, y / mag, z / mag];
 };
 
-export default Object.freeze(Vector);
+export default Object.freeze(Vector); 

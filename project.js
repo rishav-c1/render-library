@@ -13,11 +13,11 @@ const poly_to_dstring = (poly2d) => "M " + poly2d.map(
 ).join(" ") + " Z";
 //dstring, poly colour -> krgb + kspectral
 
-function project3d(list_of_polygon_3d) {
+/* function project3d(list_of_polygon_3d) {
     let list_dstrings_colours = list_of_polygon_3d.map((poly3d) => [
         poly_to_dstring(poly3d.map(parallel_projection)),
         Shade.poly_to_colour(poly3d),
         Shade.spectral(poly3d)
     ]);
     Plot.plotSVG(list_dstrings_colours);
-}
+} */

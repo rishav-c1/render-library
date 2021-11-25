@@ -24,7 +24,7 @@ Plot.plotSVG = function (list_dstrings_colours) {
         svg.appendChild(path);
     });
 };
-//Plot.generate3dPolygons = function (w1)
+//Plot.generate3dPolygons = function(w1)
 
 //project3d(list_of_polygon_3d);
 export default Object.freeze(Plot);
