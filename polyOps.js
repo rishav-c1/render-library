@@ -9,7 +9,7 @@ Polygon.normal = function (poly3d) {
             Vector.crossProduct(poly3d[2], poly3d[0])
         )
     );
-};//ret_type - [a,b,c]
+}; //ret_type - [a,b,c]
 
 Polygon.parallelProjection = (a, b, x0, y0) => (vertex) => [
     vertex[0] + a * vertex[2] + x0,

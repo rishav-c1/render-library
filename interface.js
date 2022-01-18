@@ -1,4 +1,7 @@
 import Polygon from "./polyOps.js";
+import Shade from "./shade.js";
+import Vector from "./vectorOps.js";
+
 const Graph = Object.create(null);
 
 const createGraph = function (frameHeight, frameWidth) {
@@ -8,7 +11,15 @@ const createGraph = function (frameHeight, frameWidth) {
     graph.element.setAttribute("width", frameWidth);
     graph.element.setAttribute("height", frameHeight);
     let path = document.createElementNS(ns, "path");
-    let colour = [122,122,122];
+    let highlightColour = [255, 255, 255];
+    let baseColour = [122, 122, 122];
+    let a = 0.22388;
+    let b = 0.44708;
+    let offsetX = 10;
+    let offsetY = 50;
+    let light = Vector.normalise([0.4, -1, 0.5]);
+    let vcam = Vector.negVector(Vector.normalise([a, b, -1]));
+    let alpha = 5;
     let polygons2d = [];
     let polygons3d = [];
     let listNormals = [];
@@ -16,56 +27,44 @@ const createGraph = function (frameHeight, frameWidth) {
     graph.setPolygons3d = function (listPoly3d) {
         polygons3d = listPoly3d;
         listNormals = Polygon.normal(polygons3d);
-        graph.draw();
+        updatePolygons2d();
         return graph;
-    };//done
+    };
 
     const updatePolygons2d = function () {
-        //project 2d
+        polygons2d = polygons3d.map((poly3d) => (
+            poly3d.map(Polygon.parallelProjection(a, b, offsetX, offsetY)))
+        );
         graph.draw();
-    }
-        
+    };
+
+    const colourValid = function (n) {return (n >= 0 && n <= 255);};
+    graph.setColour = function (rgb) {
+        if(colourValid(rgb[0]) && colourValid(rgb[1]) && colourValid(rgb[2])) {
+            baseColour = rgb;
+        }
+        graph.draw();
+        return graph;
+    };
+
     const polyToDstring = (poly2d) => "M " + poly2d.map(
         (vertex2d) => `${vertex2d[0]},${vertex2d[1]}`
     ).join(" ") + " Z";
-
-    graph.setColour = function (rgb) {
-        if(rgb[0] in Range (0,255) && rgb[1] in Range (0,255) && rgb[2] in Range (0,255))
-        colour = rgb;
-        graph.draw();
-        return graph;
-    };
-
-    /*
-    * shade 2d
-    * 
-    */
     graph.draw = function () {
+        const dCoeffList = listNormals.map(Shade.diffuse(light));
+        const sCoeffList = listNormals.map(Shade.spectral(light, vcam, alpha));
+        const dStrings = polygons2d.map(polyToDstring);
+        for(let i = 0; i < dStrings.length; i += 1) {
+            let d = baseColour.map((c) => c * 0.1 + c * 0.9 * dCoeffList[1]);
+            let s = highlightColour.map((h) => h * 0.9 * sCoeffList[2]);
+            let polyColour = Vector.addVector(s,d);
+
+            path.setAttribute("d", dStrings[i]);
+            path.style.fill =
+            `rgb(${polyColour[0]}, ${polyColour[1]},  ${polyColour[2]})`;
+            graph.appendChild(path);
+        }
     };
-    
     return Object.freeze(graph);
 };
-
-// colours, vcam, light-vector, range(scale)
-
-
 export default Object.freeze(Graph);
-
-/*  const svg = document.getElementById("mapRoot");
-    svg.textContent = "";
-    list_dstrings_colours.forEach(function (dstring) {
-        let path = document.createElementNS(ns, "path");
-        let ldotn = dstring[1];
-        let split_amb_diff = (c) => c * 0.1 + c * 0.9 * ldotn;
-        let diff = colour.map(split_amb_diff);
-        //Spectral
-        let spec = ks_colour.map(
-            (k) => 0.9 * k * dstring[2]
-        );
-        //Splitting up Ambient and Diffused Lights
-        let split_c = Shade.addVector(diff, spec);
-        path.setAttribute("d", dstring[0]);
-        path.style.fill = `rgb(${split_c[0]}, ${split_c[1]},  ${split_c[2]})`;
-        svg.appendChild(path);
-    });
-};*/
