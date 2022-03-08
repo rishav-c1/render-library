@@ -5,7 +5,7 @@ import Vector from "./vectorOps.js";
 
 const Graph = Object.create(null);
 
-Graph.createGraph = function (frameHeight, frameWidth) {
+Graph.createGraph = function (frameHeight, frameWidth, spec) {
   const graph = Object.create(null);
   const ns = "http://www.w3.org/2000/svg";
   graph.element = document.createElementNS(ns, "svg");
@@ -40,12 +40,12 @@ Graph.createGraph = function (frameHeight, frameWidth) {
   };
 
   el("theta").oninput = function () {
-    theta = el("theta").value;
+    theta = Number(el("theta").value);
     updateCamera();
   };
 
   el("phi").oninput = function () {
-    phi = el("phi").value;
+    phi = Number(el("phi").value);
     updateCamera();
   };
 
@@ -90,6 +90,41 @@ Graph.createGraph = function (frameHeight, frameWidth) {
     graph.draw();
     return graph;
   };
+
+  let dragX0;
+  let dragY0;
+  let dragging = false;
+
+  const dragStart = function (event) {
+    dragX0 = event.x;
+    dragY0 = event.y;
+    dragging = true;
+  };
+
+  const dragEnd = function () {
+    dragging = false;
+  };
+
+  const dragMove = function (event) {
+    if (!dragging) {
+      return;
+    }
+    const deltaX =  event.x - dragX0;
+    const deltaY =  event.y - dragY0;
+    dragX0 = event.x;
+    dragY0 = event.y;
+    theta += deltaY / (-20 * Math.PI);
+    phi += deltaX / (20 * Math.PI);
+    updateCamera();
+  };
+
+  graph.element.addEventListener("mousedown", dragStart);
+  graph.element.addEventListener("mousemove", dragMove);
+  graph.element.addEventListener("mouseup", dragEnd);
+  // graph.element.addEventListener("touchstart", draw, false);
+  // graph.element.addEventListener("touchmove", draw, false);
+  // graph.element.addEventListener("touchend", draw, false);
+
 
   graph.setPolygons3d = function (listPoly3d) {
     polygons3d = listPoly3d;
