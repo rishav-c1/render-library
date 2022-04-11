@@ -15,4 +15,6 @@ Polygon.parallelProjection = (a, b, x0, y0) => (vertex) => [
     Math.cos(a) * Math.sin(b) * vertex[2] + y0
 ];
 
+
+
 export default Object.freeze(Polygon);

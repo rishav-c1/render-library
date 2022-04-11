@@ -125,7 +125,6 @@ Graph.createGraph = function (frameHeight, frameWidth, spec) {
   // graph.element.addEventListener("touchmove", draw, false);
   // graph.element.addEventListener("touchend", draw, false);
 
-
   graph.setPolygons3d = function (listPoly3d) {
     polygons3d = listPoly3d;
     sortPolygons();
